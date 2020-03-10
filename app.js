@@ -14,6 +14,7 @@ require('./lib/passport');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users/userRoutes');
 const adminRouter = require('./routes/admin/adminRoutes');
+const productRouter = require('./routes/admin/products/productRouter');
 
 const getAllCategories = require('./routes/admin/middleware/getAllCategories');
 
@@ -70,6 +71,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/products', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
