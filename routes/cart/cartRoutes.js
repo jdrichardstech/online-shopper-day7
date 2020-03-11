@@ -1,6 +1,17 @@
 const router = require('express').Router();
 const Cart = require('../cart/models/Cart');
 
+router.get('/', (req, res, next) => {
+  Cart.findOne({ owner: req.user._id })
+    .populate('items.item')
+    .exec((err, foundCart) => {
+      if (err) {
+        return next(err);
+      }
+      return res.render('main/cart', { foundCart });
+    });
+});
+
 router.post('/:product_id', (req, res, next) => {
   Cart.findOne({ owner: req.user._id }, (err, cart) => {
     if (err) {
