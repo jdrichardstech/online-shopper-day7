@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+
 const User = require('../users/models/User');
 require('../../lib/passport');
-
-const userController = require('./controllers/userController');
+const { createUserCart } = require('../cart/controllers/cartController');
+const {
+  register,
+  updatePassword,
+  updateProfile
+} = require('./controllers/userController');
 const userValidation = require('./utils/userValidation');
 
 /* GET users listing. */
@@ -41,7 +46,8 @@ router.get('/', function(req, res, next) {
 router.get('/register', (req, res) => {
   res.render('auth/register', { errors: req.flash('errors') });
 });
-router.post('/register', userValidation, userController.register);
+
+router.post('/register', userValidation, register, createUserCart);
 
 router.get('/login', (req, res) => {
   return res.render('auth/login', { errors: req.flash('errors') });
@@ -84,8 +90,7 @@ router.get('/profile', (req, res, next) => {
 //   }).catch(err => next(err));
 // });
 router.put('/update-profile', (req, res, next) => {
-  userController
-    .updateProfile(req.body, req.user._id)
+  updateProfile(req.body, req.user._id)
     .then(user => {
       return res.redirect('/api/users/profile');
     })
@@ -104,8 +109,7 @@ router.get('/update-profile', (req, res) => {
 
 //update password
 router.put('/update-password', (req, res) => {
-  userController
-    .updatePassword(req.body, req.user._id)
+  updatePassword(req.body, req.user._id)
     .then(user => {
       return res.redirect('/api/users/profile');
     })

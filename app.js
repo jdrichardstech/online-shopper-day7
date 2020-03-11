@@ -15,9 +15,10 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users/userRoutes');
 const adminRouter = require('./routes/admin/adminRoutes');
 const productRouter = require('./routes/admin/products/productRouter');
+const cartRouter = require('./routes/cart/cartRoutes');
 
 const getAllCategories = require('./routes/admin/middleware/getAllCategories');
-
+const cartTotal = require('./routes/cart/middleware/cartTotal');
 const app = express();
 require('dotenv').config();
 
@@ -68,10 +69,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cartTotal);
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
